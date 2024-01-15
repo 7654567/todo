@@ -1,5 +1,6 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React from 'react';
 import {FilterValueTypes} from "./App";
+import {AddItemForm} from "./AddItemForm";
 
 
 type TodoListPropsTypes = {
@@ -19,30 +20,16 @@ export type TaskType = {
 	isDone: boolean
 }
 export const TodoList = (props: TodoListPropsTypes) => {
-	let [title, setTitle] = useState("")
-	let [error, setError] = useState<string | null>(null)
 
-	const addTask = () => {
-		if (title.trim() !== '') {
-			props.addTask(title.trim(), props.id)
-			setTitle('')
-		} else {
-			setError("Title is required")
-		}
-	}
-	const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => setTitle(event.currentTarget.value)
-	const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-		setError(null)
-		if (event.key === "Enter") addTask()
-	}
+	const addTask = (title: string) => props.addTask(title, props.id)
+
 	const onRemoveToDoList = () => props.removeToDoList(props.id)
 	//TODO onClickHandler
 	// const onClickHandler = (item: TaskType) => props.removeTask(item.id)
 	const onAllClickHandler = () => props.changeFilter("all", props.id)
 	const onActiveClickHandler = () => props.changeFilter("active", props.id)
 	const onCompletedClickHandler = () => props.changeFilter("completed", props.id)
-	// const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => setTitle(event.currentTarget.value)
-	// const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => setTitle(event.currentTarget.value)
+
 
 	/*TODO onKeyPress deprecated*/
 	return (
@@ -50,16 +37,7 @@ export const TodoList = (props: TodoListPropsTypes) => {
 			<h3>{props.title}
 				<button onClick={onRemoveToDoList}>X</button>
 			</h3>
-			<div>
-				<input
-					value={title}
-					onChange={onChangeHandler}
-					onKeyPress={onKeyPressHandler}
-					className={error ? 'error' : ''}
-				/>
-				<button onClick={addTask}>+</button>
-				{error && <div className='error-message'>{error}</div>}
-			</div>
+			<AddItemForm value={'ewrt'} addItem={addTask}/>
 			<ul>
 				{props.tasks && props.tasks.map((item, index) => {
 					const onClickHandler = () => props.removeTask(item.id, props.id)
@@ -93,3 +71,6 @@ export const TodoList = (props: TodoListPropsTypes) => {
 		</div>
 	);
 };
+
+
+
