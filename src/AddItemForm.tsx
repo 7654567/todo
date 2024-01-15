@@ -1,7 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 
 type AddItemFormPropsType = {
-	value: string
 	addItem: (value: string) => void
 }
 export const AddItemForm = (props: AddItemFormPropsType) => {

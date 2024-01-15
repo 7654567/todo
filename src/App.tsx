@@ -84,9 +84,27 @@ function App() {
 		})
 	}
 
+	function editTask(val: string, taskId: string, listId: string) {
+		const task = tasks[listId].find(t => t.id === taskId)
+
+		if (task) {
+			task.title = val
+			setTasks({...tasks})
+		}
+	}
+
+	function editTodoListHeader(value: string, listId: string) {
+		const list = todolists.find(t => t.id === listId)
+
+		if (list) {
+			list.title = value
+			setTasks({...tasks})
+		}
+	}
+
 	return (
 		<div className="App">
-			<AddItemForm value={'ewrt'} addItem={addTodoList}/>
+			<AddItemForm addItem={addTodoList}/>
 
 			{todolists.map(todolist => {
 
@@ -106,6 +124,8 @@ function App() {
 						changeTaskStatus={changeTaskStatus}
 						removeToDoList={removeToDoList}
 						filter={todolist.filter}
+						editTask={editTask}
+						editTodoListHeader={editTodoListHeader}
 					/>
 				}
 			)}
