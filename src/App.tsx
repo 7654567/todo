@@ -3,6 +3,7 @@ import './App.css';
 import {TaskType, TodoList} from "./TodoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
+import {ButtonAppBar} from "./ButtonAppBar";
 
 export type  FilterValueTypes = "all" | "active" | "completed"
 type TodolistsType = {
@@ -104,31 +105,37 @@ function App() {
 
 	return (
 		<div className="App">
+			<ButtonAppBar/>
+
 			<AddItemForm addItem={addTodoList}/>
 
-			{todolists.map(todolist => {
+			<div className="listsContainer">
 
-					let tasksForTodolist = tasks[todolist.id];
 
-					if (todolist.filter === "completed") tasksForTodolist = tasks[todolist.id].filter(t => t.isDone)
-					if (todolist.filter === "active") tasksForTodolist = tasks[todolist.id].filter(t => !t.isDone)
+				{todolists.map(todolist => {
 
-					return <TodoList
-						key={todolist.id}
-						id={todolist.id}
-						title={todolist.title}
-						tasks={tasksForTodolist}
-						removeTask={removeTask}
-						changeFilter={changeFilter}
-						addTask={addTask}
-						changeTaskStatus={changeTaskStatus}
-						removeToDoList={removeToDoList}
-						filter={todolist.filter}
-						editTask={editTask}
-						editTodoListHeader={editTodoListHeader}
-					/>
-				}
-			)}
+						let tasksForTodolist = tasks[todolist.id];
+
+						if (todolist.filter === "completed") tasksForTodolist = tasks[todolist.id].filter(t => t.isDone)
+						if (todolist.filter === "active") tasksForTodolist = tasks[todolist.id].filter(t => !t.isDone)
+
+						return <TodoList
+							key={todolist.id}
+							id={todolist.id}
+							title={todolist.title}
+							tasks={tasksForTodolist}
+							removeTask={removeTask}
+							changeFilter={changeFilter}
+							addTask={addTask}
+							changeTaskStatus={changeTaskStatus}
+							removeToDoList={removeToDoList}
+							filter={todolist.filter}
+							editTask={editTask}
+							editTodoListHeader={editTodoListHeader}
+						/>
+					}
+				)}
+			</div>
 		</div>
 	);
 }

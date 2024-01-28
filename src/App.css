@@ -1,10 +1,11 @@
 .App {
-	padding: 30px;
-	display: flex;
+	/*padding: 30px;*/
+	/*display: flex;*/
+	/*background-color: #ddd;*/
 }
 
 .App > div {
-	margin-right: 50px;
+	/*margin-right: 50px;*/
 }
 
 .todoList {
@@ -28,4 +29,41 @@
 
 .is-done {
 	opacity: 0.5;
+}
+
+.titleInput input {
+	height: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.titleInput label {
+	/*transform: translate(14px, 4px) scale(1);*/
+	/*TODO*/
+}
+
+.addTodoList {
+	display: flex;
+	justify-content: center;
+	width: 50%;
+	min-width: 480px;
+	margin: 30px auto;
+	gap: 10px;
+}
+
+.addTodoList .titleInput {
+	flex-grow: 1;
+}
+
+.listsContainer {
+	display: flex;
+	justify-content: center;
+	gap: 30px;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.listsContainer .addTodoList {
+	width: 100%;
+	min-width: auto;
 }
