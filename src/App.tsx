@@ -6,7 +6,7 @@ import {AddItemForm} from "./AddItemForm";
 import {ButtonAppBar} from "./ButtonAppBar";
 
 export type  FilterValueTypes = "all" | "active" | "completed"
-type TodolistsType = {
+export type TodolistsType = {
 	id: string
 	title: string
 	filter: FilterValueTypes
