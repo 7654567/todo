@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { todolistAPI } from "../api/todolists-api";
+import { todolistsAPI } from "../api/todolists-api";
 
 export default {
   title: "API",
@@ -10,7 +10,7 @@ export const GetTodolists = () => {
   useEffect(() => {
     // здесь мы будем делать запрос и ответ закидывать в стейт.
     // который в виде строки будем отображать в div-ке
-    todolistAPI.getTodolists().then((res) => setState(res.data));
+    todolistsAPI.getTodolists().then((res) => setState(res.data));
   }, []);
   return <div>{JSON.stringify(state)}</div>;
 };
@@ -18,7 +18,7 @@ export const GetTodolists = () => {
 export const CreateTodolist = () => {
   const [state, setState] = useState<any>(null);
   useEffect(() => {
-    todolistAPI
+    todolistsAPI
       .createTodolist("2345234")
       .then((res) => setState(res.data.data.item));
   }, []);
@@ -43,7 +43,7 @@ export const DeleteTodolist = () => {
       />
       <button
         onClick={() =>
-          todolistAPI.deleteTodolist(userId).then((res) => setState(res))
+          todolistsAPI.deleteTodolist(userId).then((res) => setState(res))
         }
       >
         delete
@@ -56,7 +56,7 @@ export const DeleteTodolist = () => {
 export const UpdateTodolistTitle = () => {
   const [state, setState] = useState<any>(null);
   useEffect(() => {
-    todolistAPI
+    todolistsAPI
       .updateTodolist("1087b610-39e4-467a-843b-4e7e5d258c05", "new title")
       .then((res) => setState(res));
   }, []);

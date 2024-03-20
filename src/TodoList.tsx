@@ -24,6 +24,7 @@ export type TaskType = {
   id: string;
   title: string;
   isDone: boolean;
+  todoListId?: string;
 };
 export const TodoList = (props: TodoListPropsTypes) => {
   console.log("Todolist called");

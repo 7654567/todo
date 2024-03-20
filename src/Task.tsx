@@ -23,17 +23,17 @@ export const Task = React.memo((props: TaskPropsType) => {
   );
   return (
     <li key={props.task.id} className={props.task.isDone ? "is-done" : ""}>
-      <Checkbox checked={props.task.isDone} onChange={onChangeHandler} />
+      <Checkbox
+        checked={props.task.isDone || false}
+        onChange={onChangeHandler}
+      />
 
       {/*<input*/}
-      {/*	type="checkbox"*/}
-
-      {/*	checked={item.isDone}*/}
-      {/*	onChange={onChangeHandler}*/}
+      {/*  type="checkbox"*/}
+      {/*  checked={props.task.isDone || false}*/}
+      {/*  onChange={onChangeHandler}*/}
       {/*/>*/}
       <EditableSpan value={props.task.title} onChange={editTask} />
-      {/*<span>{item.title}</span>*/}
-      {/*<button onClick={onClickHandler}>X</button>*/}
       <IconButton onClick={onClickHandler}>
         <Delete />
       </IconButton>

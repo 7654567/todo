@@ -35,8 +35,23 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
         // className={error ? 'error' : ''}
         error={!!error}
         label={"Title"}
+        sx={{
+          input: {
+            height: "20px",
+            paddingTop: "5px",
+            paddingBottom: "5px",
+          },
+          label: {
+            top: "unset",
+            bottom: `${title ? "10px" : "17px"}`,
+          },
+          "& label.Mui-focused": {
+            top: "0",
+            bottom: "unset",
+          },
+        }}
         // style={{"height": "20px"}}
-        className={"titleInput"}
+        //className={"titleInput"}
       />
       {/*<input*/}
       {/*	value={title}*/}
