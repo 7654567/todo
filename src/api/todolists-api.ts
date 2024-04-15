@@ -4,28 +4,17 @@ const instance = axios.create({
   baseURL: "https://social-network.samuraijs.com/api/1.1/",
   withCredentials: true,
   headers: {
-    // Не забываем заменить API-KEY на собственный
     "API-KEY": "a9e7edde-9af1-46f9-bd6b-bdceb88a71cb",
   },
 });
-type TodolistType = {
-  id: string;
-  addedDate: string;
-  order: number;
-  title: string;
-};
-type ResponseType<D = {}> = {
-  resultCode: number;
-  messages: string[];
-  fieldsErrors: FieldErrorType[];
-  data: D;
-};
 
-type FieldErrorType = {
-  error: string;
-  field: string;
-};
 export const todolistsAPI = {
+  addTodolist: (title: string) => instance.post(`todo-lists/`, { title }),
+  removeTodolist: (todolistId: string) =>
+    instance.delete(`todo-lists/${todolistId}`),
+
+  // addTodolistTasks: (title: string) =>
+  //   instance.post<ResponseType>(`todo-lists/`, { title }),
   updateTodolist: (todolistId: string, title: string) =>
     instance.put<ResponseType>(`todo-lists/${todolistId}`, { title }),
   getTodolists: () => instance.get(`todo-lists/`),
@@ -41,16 +30,84 @@ export const todolistsAPI = {
   addTask: (title: string, todolistId: string) =>
     instance
       .post(`/todo-lists/${todolistId}/tasks/`, { title })
-      .then((res) => res.data.data.item),
+      .then((res) => res),
   updateTask: (todolistId: string, taskId: string, task: any) =>
     instance
       .put(`/todo-lists/${todolistId}/tasks/${taskId}`, task)
-      // .then((res) => res.data.data.item),
-      .then(
-        (res) => res.data.data.item
-        // {
-        //   console.log(res);
-        //   debugger;
-        // }
-      ),
+      .then((res) => res.data.data.item),
+  getTasks(todolistId: string) {
+    return instance.get(`todo-lists/${todolistId}/tasks`);
+  },
 };
+// type TodolistType = {
+//   id: string;
+//   addedDate: string;
+//   order: number;
+//   title: string;
+// };
+// type ResponseType<D = {}> = {
+//   resultCode: number;
+//   messages: string[];
+//   fieldsErrors: FieldErrorType[];
+//   data: D;
+// };
+//
+// type FieldErrorType = {
+//   error: string;
+//   field: string;
+// };
+
+// types
+export type TodolistType = {
+  id: string;
+  title: string;
+  addedDate: string;
+  order: number;
+};
+export type ResponseType<D = {}> = {
+  resultCode: number;
+  messages: Array<string>;
+  fieldsErrors: Array<string>;
+  data: D;
+};
+
+export enum TaskStatuses {
+  New = 0,
+  InProgress = 1,
+  Completed = 2,
+  Draft = 3,
+}
+
+export enum TaskPriorities {
+  Low = 0,
+  Middle = 1,
+  Hi = 2,
+  Urgently = 3,
+  Later = 4,
+}
+
+export type TaskType = {
+  description: string;
+  title: string;
+  status: TaskStatuses;
+  priority: TaskPriorities;
+  startDate: string;
+  deadline: string;
+  id: string;
+  todoListId: string;
+  order: number;
+  addedDate: string;
+};
+export type UpdateTaskModelType = {
+  title: string;
+  description: string;
+  status: TaskStatuses;
+  priority: TaskPriorities;
+  startDate: string;
+  deadline: string;
+};
+// type GetTasksResponse = {
+//   error: string | null;
+//   totalCount: number;
+//   items: TaskType[];
+// };

@@ -1,11 +1,14 @@
-import React, { useCallback } from "react";
-import { FilterValueTypes } from "./App";
+import React, { useCallback, useEffect } from "react";
 import { AddItemForm } from "./AddItemForm";
 import { EditableSpan } from "./EditableSpan";
 import Button from "@mui/material/Button";
 import { Delete } from "@mui/icons-material";
 import { IconButton, Paper } from "@mui/material";
 import { Task } from "./Task";
+import { fetchTasksTC } from "./state/tasks-reducer";
+import { useAppDispatch } from "./state/store";
+import { TaskStatuses } from "./api/todolists-api";
+import { FilterValueTypes } from "./App";
 
 type TodoListPropsTypes = {
   id: string;
@@ -15,10 +18,11 @@ type TodoListPropsTypes = {
   addTask: (title: string, todolistId: string) => void;
   removeTask: (id: string, todolistId: string) => void;
   editTask: (val: string, taskId: string, listId: string) => void;
-  changeTaskStatus: (id: string, todolistId: string) => void;
+  changeTaskStatus: (id: string, todolistId: string, status: any) => void;
   removeToDoList: (id: string) => void;
   editTodoListHeader: (val: string, listId: string) => void;
   filter: FilterValueTypes;
+  entityStatus: string;
 };
 export type TaskType = {
   id: string;
@@ -27,8 +31,13 @@ export type TaskType = {
   todoListId?: string;
 };
 export const TodoList = (props: TodoListPropsTypes) => {
+  const dispatch = useAppDispatch();
   console.log("Todolist called");
-
+  useEffect(() => {
+    // @ts-ignore
+    // console.log(props.id, fetchTasksTC(props.id));
+    dispatch(fetchTasksTC(props.id));
+  }, []);
   const addTask = useCallback(
     (title: string) => props.addTask(title, props.id),
     [props.addTask, props.id]
@@ -54,9 +63,13 @@ export const TodoList = (props: TodoListPropsTypes) => {
   let tasksForTodolist = props.tasks;
 
   if (props.filter === "completed")
-    tasksForTodolist = props.tasks.filter((t) => t.isDone);
+    tasksForTodolist = props.tasks.filter(
+      (t: any) => t.status === TaskStatuses.Completed
+    );
   if (props.filter === "active")
-    tasksForTodolist = props.tasks.filter((t) => !t.isDone);
+    tasksForTodolist = props.tasks.filter(
+      (t: any) => !(t.status === TaskStatuses.Completed)
+    );
   /*TODO onKeyPress deprecated*/
   return (
     <Paper style={{ padding: "10px" }} elevation={12}>
@@ -64,22 +77,26 @@ export const TodoList = (props: TodoListPropsTypes) => {
       <h3>
         <EditableSpan value={props.title} onChange={editTodoListHeader} />
         {/*<button onClick={onRemoveToDoList}>X</button>*/}
-        <IconButton onClick={onRemoveToDoList}>
+        <IconButton
+          onClick={onRemoveToDoList}
+          disabled={props.entityStatus === "loading"}
+        >
           <Delete />
         </IconButton>
       </h3>
       <AddItemForm addItem={addTask} />
       <ul>
-        {tasksForTodolist.map((task) => (
-          <Task
-            removeTask={props.removeTask}
-            changeTaskTitle={props.editTask}
-            changeTaskStatus={props.changeTaskStatus}
-            task={task}
-            todolistId={props.id}
-            key={task.id}
-          />
-        ))}
+        {tasksForTodolist &&
+          tasksForTodolist.map((task) => (
+            <Task
+              removeTask={props.removeTask}
+              changeTaskTitle={props.editTask}
+              changeTaskStatus={props.changeTaskStatus}
+              task={task}
+              todolistId={props.id}
+              key={task.id}
+            />
+          ))}
       </ul>
       <div>
         <Button
