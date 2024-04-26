@@ -3,6 +3,7 @@ import { Dispatch } from "redux";
 import { todolistsAPI } from "../api/todolists-api";
 import { RequestStatusType, setAppStatusAC } from "./app-reducer";
 import { FilterValueTypes, TodolistType } from "../App";
+import { fetchTasksTC } from "./tasks-reducer";
 
 export type TodolistDomainType = TodolistType & {
   filter: FilterValueTypes;
@@ -31,6 +32,7 @@ export type SetTodolistsActionType = {
   type: "SET-TODOLISTS";
   todolists: Array<TodolistType>;
 };
+export type ClearDataActionType = ReturnType<typeof clearDataAC>;
 
 type ChangeTodolistEntityStatusType = ReturnType<
   typeof changeTodolistEntityStatusAC
@@ -42,7 +44,8 @@ type ActionType =
   | ChangeTodolistTitleActionType
   | ChangeTodolistFilterActionType
   | SetTodolistsActionType
-  | ChangeTodolistEntityStatusType;
+  | ChangeTodolistEntityStatusType
+  | ClearDataActionType;
 
 const initialState: Array<TodolistDomainType> = [];
 //     [
@@ -97,12 +100,16 @@ export const todolistsReducer = (
         //TODO: filter: "all"
       }));
     }
+    case "CLEAR-DATA": {
+      return [];
+    }
 
     default:
       return state;
   }
 };
 
+export const clearDataAC = () => ({ type: "CLEAR-DATA" } as const);
 export const removeTodolistAC = (
   todolistId: string
 ): RemoveTodolistActionType => ({ type: "REMOVE-TODOLIST", id: todolistId });
@@ -142,12 +149,18 @@ export const changeTodolistEntityStatusAC = (
     status,
   } as const);
 
-export const fetchTodolistsThunk = (dispatch: Dispatch) => {
+export const fetchTodolistsThunk = (dispatch: Dispatch<any>) => {
   dispatch(setAppStatusAC("loading"));
-  todolistsAPI.getTodolists().then((res) => {
-    dispatch(setTodolistsAC(res.data));
-    dispatch(setAppStatusAC("succeeded"));
-  });
+  todolistsAPI
+    .getTodolists()
+    .then((res) => {
+      dispatch(setTodolistsAC(res.data));
+      dispatch(setAppStatusAC("succeeded"));
+      return res.data;
+    })
+    .then((todolists) => {
+      todolists.forEach((tl: any) => dispatch(fetchTasksTC(tl.id)));
+    });
 };
 export const addTodolistsThunk = (title: string) => (dispatch: Dispatch) => {
   dispatch(setAppStatusAC("loading"));

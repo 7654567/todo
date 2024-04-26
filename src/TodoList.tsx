@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import { Delete } from "@mui/icons-material";
 import { IconButton, Paper } from "@mui/material";
 import { Task } from "./Task";
-import { fetchTasksTC } from "./state/tasks-reducer";
 import { useAppDispatch } from "./state/store";
 import { TaskStatuses } from "./api/todolists-api";
 import { FilterValueTypes } from "./App";
@@ -13,7 +12,7 @@ import { FilterValueTypes } from "./App";
 type TodoListPropsTypes = {
   id: string;
   title: string;
-  tasks: TaskType[];
+  tasks: any /*TaskType[]*/;
   changeFilter: (id: FilterValueTypes, todolistId: string) => void;
   addTask: (title: string, todolistId: string) => void;
   removeTask: (id: string, todolistId: string) => void;
@@ -31,13 +30,9 @@ export type TaskType = {
   todoListId?: string;
 };
 export const TodoList = (props: TodoListPropsTypes) => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   console.log("Todolist called");
-  useEffect(() => {
-    // @ts-ignore
-    // console.log(props.id, fetchTasksTC(props.id));
-    dispatch(fetchTasksTC(props.id));
-  }, []);
+  useEffect(() => {}, []);
   const addTask = useCallback(
     (title: string) => props.addTask(title, props.id),
     [props.addTask, props.id]
@@ -87,7 +82,7 @@ export const TodoList = (props: TodoListPropsTypes) => {
       <AddItemForm addItem={addTask} />
       <ul>
         {tasksForTodolist &&
-          tasksForTodolist.map((task) => (
+          tasksForTodolist.map((task: any) => (
             <Task
               removeTask={props.removeTask}
               changeTaskTitle={props.editTask}

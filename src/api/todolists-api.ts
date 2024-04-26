@@ -39,6 +39,18 @@ export const todolistsAPI = {
     return instance.get(`todo-lists/${todolistId}/tasks`);
   },
 };
+
+export const authAPI = {
+  loggin(data: LogginModelType) {
+    return instance.post("/auth/login", data);
+  },
+  me() {
+    return instance.get("/auth/me");
+  },
+  logout() {
+    return instance.delete("/auth/login");
+  },
+};
 // type TodolistType = {
 //   id: string;
 //   addedDate: string;
@@ -111,3 +123,9 @@ export type UpdateTaskModelType = {
 //   totalCount: number;
 //   items: TaskType[];
 // };
+export type LogginModelType = {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+  captcha?: boolean;
+};
